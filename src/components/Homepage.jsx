@@ -1,13 +1,22 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
-import logo from "../assets/logo.png";
+
+
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { FaCrown } from "react-icons/fa";
+import axios from "axios";
+import logo from "../assets/logo.png";
 import basic from "../assets/basic.png";
 import lite from "../assets/lite.png";
 import pro from "../assets/pro.png";
-import Advanced from "../assets/advaned.png";
-import { FaCrown } from "react-icons/fa";
-import axios from "axios";
+import advanced from "../assets/advaned.png";
+
+const subscriptionTypes = {
+  basic: { image: basic, name: "Basic", color: "bg-gray-600" },
+  lite: { image: lite, name: "Lite", color: "bg-green-600" },
+  pro: { image: pro, name: "Pro", color: "bg-violet-700" },
+  advanced: { image: advanced, name: "Advanced", color: "bg-gradient-to-tr from-indigo-500 via-purple-500 via-blue-500 via-yellow-700 to-pink-500 " },
+};
+
 export default function Homepage() {
   const [subscription, setSubscription] = useState("");
 
@@ -15,13 +24,12 @@ export default function Homepage() {
     const fetchUser = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://localhost:5000/api/auth/me", {
+        if (!token) return;
+        
+        const { data } = await axios.get("http://localhost:5000/api/auth/me", {
           headers: { Authorization: `Bearer ${token}` },
         });
-
-        console.log(response.data);
-        setSubscription(response.data.subscription);
-        // Set the profile image URL
+        setSubscription(data.subscription || "basic");
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -30,113 +38,64 @@ export default function Homepage() {
     fetchUser();
   }, []);
 
-  const sub = subscription;
+  const { image, name, color } = subscriptionTypes[subscription] || subscriptionTypes.basic;
 
-  const manage = () => {
-    let imagetype; // Declare variables outside of the condition
-    let typename;
-
-    if (sub === "basic") {
-      imagetype = basic;
-      typename = "Basic";
-    } else if (sub === "lite") {
-      imagetype = lite;
-      typename = "Lite";
-    } else if (sub === "pro") {
-      imagetype = pro;
-      typename = "Pro";
-    } else {
-      imagetype = Advanced;
-      typename = "Advanced";
-    }
-
-    return { imagetype, typename }; // Return both variables
-  };
-  const data = manage();
-  console.log(data.typename);
-  // fetchUser();
+  const menuItems = [
+    { to: "/image", label: "Image Generation" },
+    { to: "/videoGeneration", label: "Video Generation" },
+    { to: "/pptGeneration", label: "PPT Generation" },
+    { to: "/musicGeneration", label: "Music Generation" },
+  ];
 
   return (
-    <div className="flex  h-full  items-center justify-between w-full  flex-col bg-slate-800">
-      <div className="h-24  w-full p-8 flex  items-center">
-        <img src={logo} alt="" className="h-16" />
+    <div className="flex flex-col items-center justify-around h-full w-full bg-slate-800">
+      <div className="h-24 w-full p-8 flex items-center">
+        <img src={logo} alt="Logo" className="h-16" />
       </div>
-      <div className="h-[400px] flex items-center flex-col">
-        <Link
-          to="/image"
-          className="h-14 m-3 w-72 border-solid border-2 border-white  bg-orange-500 items-center justify-center flex rounded-xl"
-        >
-          <span className="text-white font-semibold font-lato">
-            Image Generation
-          </span>
-        </Link>
-        <Link
-          to="/videoGeneration"
-          className="h-14 m-3 w-72  border-solid border-2 border-white    bg-orange-500 items-center justify-center font-lato flex rounded-xl "
-        >
-          <span className="text-white font-semibold">Video Generation</span>
-        </Link>
-        <Link
-          to="/pptGeneration"
-          className="h-14 m-3 w-72 bg-orange-500 border-solid border-2 border-white  items-center justify-center font-lato flex rounded-xl "
-        >
-          <span className="text-white font-semibold">PPT Generation</span>
-        </Link>
-        <Link
-          to="/musicGeneration"
-          className="h-14 m-3 w-72 bg-orange-500 border-solid border-2 border-white  items-center justify-center font-lato flex rounded-xl "
-        >
-          <span className="text-white font-semibold">Music Generation</span>
-        </Link>
+      
+      <div className=" flex flex-col items-center">
+        {menuItems.map(({ to, label }) => (
+          <Link
+            key={to}
+            to={to}
+            className="h-12 m-3 w-64 border-1 border border-white bg-orange-500 flex items-center justify-center rounded-xl text-white font-semibold"
+          >
+            {label}
+          </Link>
+        ))}
+
+        {/* Interview Preparation Section */}
         <div className="relative">
           <Link
-            to="/Intereview Preparation"
-            className={`h-14  m-3 w-72 z-10 bg-red-600  ${
-              sub != "advanced" ? "blur-sm" : ""
-            } border-solid border-2 border-white  items-center justify-center font-lato flex rounded-xl `}
+            to="/InterviewPreparation"
+            className={`h-12 m-3 w-64 bg-red-600 border-1 border border-gray-200 flex items-center text-base justify-center rounded-xl text-white font-semibold ${
+              subscription !== "advanced" ? "blur-sm" : ""
+            }`}
           >
-            <span className="text-white font-semibold">
-              Interview Preparation
-            </span>
+            Interview Preparation
           </Link>
-          {sub != "advanced" ? (
-            <div className="absolute top-3 left-3 rounded-xl h-14 w-72 border-2  bg-gray-500  bg-opacity-60 flex items-center justify-center gap-4">
-              <FaCrown size={28} color="#ffb83d" />{" "}
-              <span className="text-lg font-bold  text-white">
-                {" "}
-                Advanced Membership
-              </span>
+          {subscription !== "advanced" && (
+            <div className="absolute top-3 left-3 h-12 w-64 flex items-center justify-center bg-gray-500 bg-opacity-60 rounded-xl border-2">
+              <FaCrown size={28} color="#ffb83d" />
+              <span className="text-lg font-bold text-white">Advanced Membership</span>
             </div>
-          ) : (
-            <></>
           )}
         </div>
       </div>
 
-      <div className="h-44 flex p-4 px-6 justify-center items-center  w-full ">
-        <div className="h-36 w-72 mx-4   flex border-white rounded-xl justify-center items-center overflow-hidden relative">
-          <div className="h-full w-full bg-gradient-to-tr rounded-xl from-indigo-500 via-purple-500 via-blue-500 via-yellow-700 to-pink-500"></div>
-          <div
-            className={`absolute h-[135px] w-[280px]  top-1 ${
-              sub == "basic"
-                ? "bg-gray-600"
-                : sub == "lite"
-                ? "bg-green-600"
-                : sub == "pro"
-                ? "bg-violet-700"
-                : ""
-            }  rounded-xl px-2 flex`}
-          >
-            <div className="w-48   flex justify-center items-center ">
-              <img src={data.imagetype} alt="" className="h-24 w-full" />
+      {/* Membership Card */}
+      <div className="h-36 flex  px-6  justify-center items-center w-full">
+        <div className="h-28 w-72 mx-4 flex border-white rounded-xl justify-center items-center overflow-hidden relative">
+          <div className={`h-full w-full rounded-xl ${color} `}></div>
+          <div className={`absolute rounded-xl  gap-2 flex justify-center`}>
+            <div className="flex justify-center items-center">
+              <img src={image} alt={name} className="w-24 h-20 " />
             </div>
-            <div className="flex w-full justify-between py-6 flex-col gap-3 items-center">
-              <div className="text-white text-3xl font-premium capitalize">
-                {data.typename}
-              </div>
+            <div className="flex flex-col gap-2 items-center justify-around">
+              <div className="text-white text-xl font-premium capitalize">{name}</div>
               <Link
                 to="/manageMembership"
-                className="h-12 text-center border-2 px-4 w-36 text-white font-base justify-center rounded-xl flex items-center font-imprima "
+                className="h-10 text-center border-1 border px-4 w-24 text-xs text-white font-base justify-center rounded-xl flex items-center font-imprima"
               >
                 Manage Membership
               </Link>

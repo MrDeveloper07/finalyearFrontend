@@ -15,6 +15,15 @@
     width: 2px; /* Very thin scrollbar */
     height: 2px; /* For horizontal scrollbar if any */
   }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .hide-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
   
   .scrollable::-webkit-scrollbar-track {
     background: transparent; /* Make the track invisible */

@@ -37,13 +37,13 @@ export default function Subscription() {
         Team Active offers you the most friendly packages to start your design
         career
       </div>
-      <div className="h-[360px] w-full px-8 gap-2 mt-10 flex justify-between">
+      <div className="h-[330px] w-full  px-8 gap-2 mt-6 flex justify-between">
         <div
           className={`${
             sub == "basic"
               ? " border-4 border-green-400 "
               : "border-2 border-white"
-          }   from-slate-100 bg-gradient-to-b w-64 my-4 rounded-[35px] flex flex-col items-center`}
+          }   from-slate-100 bg-gradient-to-b  my-4 rounded-[35px] flex flex-col items-center`}
         >
           <div className="mt-6 text-black font-bold text-2xl">Free</div>
           <div className="w-full text-center flex justify-center text-sm font-semibold mt-4 ">
@@ -65,7 +65,7 @@ export default function Subscription() {
               sub == "lite"
                 ? " border-4 border-green-400 "
                 : "border-2 border-white"
-            } h-[328px]  from-blue-600 bg-gradient-to-t to-slate-200 w-64 my-4 rounded-[35px] flex flex-col items-center`}
+            } h-[300px]  from-green-600 bg-gradient-to-t to-slate-200  my-4 rounded-[35px] flex flex-col items-center`}
           >
             <div className="mt-6 text-black font-bold text-2xl">Lite</div>
             <div className="w-full text-center flex justify-center text-sm font-semibold mt-4 ">
@@ -103,7 +103,7 @@ export default function Subscription() {
               sub == "pro"
                 ? " border-4 border-green-400 "
                 : "border-2 border-white"
-            } h-[328px]  from-blue-600 bg-gradient-to-t to-slate-200 w-64 my-4 rounded-[35px] flex flex-col items-center`}
+            } h-[300px]  from-blue-600 bg-gradient-to-t to-slate-200  my-4 rounded-[35px] flex flex-col items-center`}
           >
             <div className="mt-6 text-black font-bold text-2xl">Pro</div>
             <div className="w-full text-center flex justify-center text-sm font-semibold mt-4 ">
@@ -141,7 +141,7 @@ export default function Subscription() {
               sub == "advanced"
                 ? " border-4 border-green-400 "
                 : "border-2 border-white"
-            } h-[328px]  from-blue-600 bg-gradient-to-t to-slate-200 w-64 my-4 rounded-[35px] flex flex-col items-center`}
+            } h-[300px]  from-purple-600 bg-gradient-to-t to-slate-200  my-4 rounded-[35px] flex flex-col items-center`}
           >
             <div className="mt-6 text-black font-bold text-2xl">Advanced</div>
             <div className="w-full text-center flex justify-center text-sm font-semibold mt-4 ">
